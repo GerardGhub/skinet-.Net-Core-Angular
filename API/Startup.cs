@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.Helpers;
 using Core.Interfaces;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Builder;
@@ -33,6 +34,8 @@ namespace API
         {
             //Transient Singleton Scrope
            services.AddScoped<IProductRepository, ProductRepository>();
+           services.AddScoped(typeof(IGenericRepository<>), (typeof(GenericRepository<>)));
+           services.AddAutoMapper(typeof(MappingProfiles));
             //lambda expressions
             services.AddControllers();
             services.AddDbContext<StoreContext>(x => 
@@ -57,7 +60,7 @@ namespace API
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
+            app.UseStaticFiles();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
